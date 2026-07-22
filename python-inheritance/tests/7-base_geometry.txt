@@ -7,6 +7,18 @@ area() raises because it is not implemented:
 Traceback (most recent call last):
 Exception: area() is not implemented
 
+integer_validator() with no arguments raises a TypeError:
+
+>>> bg.integer_validator()  # doctest: +ELLIPSIS
+Traceback (most recent call last):
+TypeError: ...
+
+integer_validator() with only one argument raises a TypeError:
+
+>>> bg.integer_validator("age")  # doctest: +ELLIPSIS
+Traceback (most recent call last):
+TypeError: ...
+
 A valid positive integer passes silently:
 
 >>> bg.integer_validator("age", 1)
