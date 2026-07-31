@@ -1,7 +1,10 @@
 #!/usr/bin/python3
 """Unittest for the Base class."""
 import unittest
+import os
 from models.base import Base
+from models.rectangle import Rectangle
+from models.square import Square
 
 
 class TestBaseInit(unittest.TestCase):
@@ -108,3 +111,165 @@ class TestBaseFromJSONString(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestBaseSaveToFile(unittest.TestCase):
+    """Test cases for Base.save_to_file."""
+
+    def tearDown(self):
+        """Remove any JSON files created during the test."""
+        for filename in ("Rectangle.json", "Square.json"):
+            if os.path.exists(filename):
+                os.remove(filename)
+
+    def test_save_creates_file(self):
+        """Test that save_to_file creates the expected file."""
+        r = Rectangle(10, 7, 2, 8)
+        Rectangle.save_to_file([r])
+        self.assertTrue(os.path.exists("Rectangle.json"))
+
+    def test_save_none_creates_empty_list_file(self):
+        """Test that saving None writes an empty list."""
+        Rectangle.save_to_file(None)
+        with open("Rectangle.json", "r") as f:
+            self.assertEqual(f.read(), "[]")
+
+    def test_save_content_matches_dictionaries(self):
+        """Test that the saved JSON matches the objects' dictionaries."""
+        r1 = Rectangle(10, 7, 2, 8)
+        r2 = Rectangle(2, 4)
+        Rectangle.save_to_file([r1, r2])
+        with open("Rectangle.json", "r") as f:
+            content = f.read()
+        expected = Rectangle.to_json_string(
+            [r1.to_dictionary(), r2.to_dictionary()])
+        self.assertEqual(content, expected)
+
+    def test_save_overwrites_existing_file(self):
+        """Test that save_to_file overwrites a pre-existing file."""
+        r1 = Rectangle(10, 7)
+        Rectangle.save_to_file([r1])
+        r2 = Rectangle(2, 2)
+        Rectangle.save_to_file([r2])
+        with open("Rectangle.json", "r") as f:
+            content = f.read()
+        self.assertEqual(content, Rectangle.to_json_string(
+            [r2.to_dictionary()]))
+
+
+class TestBaseLoadFromFile(unittest.TestCase):
+    """Test cases for Base.load_from_file."""
+
+    def tearDown(self):
+        """Remove any JSON files created during the test."""
+        for filename in ("Rectangle.json", "Square.json"):
+            if os.path.exists(filename):
+                os.remove(filename)
+
+    def test_load_missing_file_returns_empty_list(self):
+        """Test that a missing file returns an empty list."""
+        self.assertEqual(Rectangle.load_from_file(), [])
+
+    def test_load_returns_list_of_correct_type(self):
+        """Test that loaded instances are of the correct class."""
+        Rectangle.save_to_file([Rectangle(10, 7, 2, 8)])
+        result = Rectangle.load_from_file()
+        self.assertIsInstance(result[0], Rectangle)
+
+    def test_load_preserves_attributes(self):
+        """Test that loaded instances preserve original attributes."""
+        r1 = Rectangle(10, 7, 2, 8)
+        Rectangle.save_to_file([r1])
+        result = Rectangle.load_from_file()
+        self.assertEqual(str(result[0]), str(r1))
+
+    def test_load_preserves_order_and_count(self):
+        """Test that loaded instances match input order and count."""
+        r1 = Rectangle(10, 7, 2, 8)
+        r2 = Rectangle(2, 4)
+        Rectangle.save_to_file([r1, r2])
+        result = Rectangle.load_from_file()
+        self.assertEqual(len(result), 2)
+        self.assertEqual(str(result[0]), str(r1))
+        self.assertEqual(str(result[1]), str(r2))
+
+    def test_load_square_returns_square_instances(self):
+        """Test loading works correctly for Square as well."""
+        s1 = Square(5)
+        s2 = Square(7, 9, 1)
+        Square.save_to_file([s1, s2])
+        result = Square.load_from_file()
+        self.assertIsInstance(result[0], Square)
+        self.assertEqual(str(result[0]), str(s1))
+        self.assertEqual(str(result[1]), str(s2))
+
+
+class TestBaseCreate(unittest.TestCase):
+    """Test cases for Base.create."""
+
+    def test_create_rectangle_from_dictionary(self):
+        """Test creating a Rectangle instance from a dictionary."""
+        r1 = Rectangle(3, 5, 1)
+        d = r1.to_dictionary()
+        r2 = Rectangle.create(**d)
+        self.assertEqual(str(r1), str(r2))
+
+    def test_create_square_from_dictionary(self):
+        """Test creating a Square instance from a dictionary."""
+        s1 = Square(10, 2, 1)
+        d = s1.to_dictionary()
+        s2 = Square.create(**d)
+        self.assertEqual(str(s1), str(s2))
+
+    def test_create_returns_new_instance(self):
+        """Test that create returns a distinct object, not the same one."""
+        r1 = Rectangle(3, 5, 1)
+        d = r1.to_dictionary()
+        r2 = Rectangle.create(**d)
+        self.assertIsNot(r1, r2)
+
+
+class TestBaseCSV(unittest.TestCase):
+    """Test cases for Base.save_to_file_csv and load_from_file_csv."""
+
+    def tearDown(self):
+        """Remove any CSV files created during the test."""
+        for filename in ("Rectangle.csv", "Square.csv"):
+            if os.path.exists(filename):
+                os.remove(filename)
+
+    def test_save_csv_creates_file(self):
+        """Test that save_to_file_csv creates the expected file."""
+        r = Rectangle(10, 7, 2, 8)
+        Rectangle.save_to_file_csv([r])
+        self.assertTrue(os.path.exists("Rectangle.csv"))
+
+    def test_save_csv_none_creates_empty_file(self):
+        """Test that saving None to CSV writes an empty file."""
+        Rectangle.save_to_file_csv(None)
+        with open("Rectangle.csv", "r") as f:
+            self.assertEqual(f.read(), "")
+
+    def test_csv_round_trip_rectangle(self):
+        """Test a full CSV save/load round trip for Rectangle."""
+        r1 = Rectangle(10, 7, 2, 8)
+        r2 = Rectangle(2, 4)
+        Rectangle.save_to_file_csv([r1, r2])
+        result = Rectangle.load_from_file_csv()
+        self.assertEqual(len(result), 2)
+        self.assertEqual(str(result[0]), str(r1))
+        self.assertEqual(str(result[1]), str(r2))
+
+    def test_csv_round_trip_square(self):
+        """Test a full CSV save/load round trip for Square."""
+        s1 = Square(5)
+        s2 = Square(7, 9, 1)
+        Square.save_to_file_csv([s1, s2])
+        result = Square.load_from_file_csv()
+        self.assertEqual(len(result), 2)
+        self.assertEqual(str(result[0]), str(s1))
+        self.assertEqual(str(result[1]), str(s2))
+
+    def test_load_csv_missing_file_returns_empty_list(self):
+        """Test that a missing CSV file returns an empty list."""
+        self.assertEqual(Rectangle.load_from_file_csv(), [])
