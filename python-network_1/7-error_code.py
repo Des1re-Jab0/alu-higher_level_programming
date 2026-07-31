@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Sends a request to a URL using requests; prints the body, or the error code if status is 400 or above."""
+"""Fetches a URL and prints the body, or the error code."""
 import requests
 import sys
 
