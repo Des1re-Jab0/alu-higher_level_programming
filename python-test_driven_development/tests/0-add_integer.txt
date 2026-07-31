@@ -55,3 +55,27 @@ b is a list, raises TypeError
 Traceback (most recent call last):
     ...
 TypeError: b must be an integer
+
+a is infinity, raises OverflowError
+>>> add_integer(float('inf'), 1)
+Traceback (most recent call last):
+    ...
+OverflowError: cannot convert float infinity to integer
+
+b is infinity, raises OverflowError
+>>> add_integer(1, float('inf'))
+Traceback (most recent call last):
+    ...
+OverflowError: cannot convert float infinity to integer
+
+a is NaN, raises ValueError
+>>> add_integer(float('nan'), 1)
+Traceback (most recent call last):
+    ...
+ValueError: cannot convert float NaN to integer
+
+b is NaN, raises ValueError
+>>> add_integer(1, float('nan'))
+Traceback (most recent call last):
+    ...
+ValueError: cannot convert float NaN to integer

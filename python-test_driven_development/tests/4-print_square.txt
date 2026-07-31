@@ -37,3 +37,9 @@ size is None, raises TypeError
 Traceback (most recent call last):
     ...
 TypeError: size must be an integer
+
+Missing size argument, raises TypeError
+>>> print_square()
+Traceback (most recent call last):
+    ...
+TypeError: print_square() missing 1 required positional argument: 'size'

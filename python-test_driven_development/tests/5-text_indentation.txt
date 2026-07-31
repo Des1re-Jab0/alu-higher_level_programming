@@ -26,3 +26,9 @@ TypeError: text must be a string
 
 Empty string prints nothing
 >>> text_indentation("")
+
+Missing text argument, raises TypeError
+>>> text_indentation()
+Traceback (most recent call last):
+    ...
+TypeError: text_indentation() missing 1 required positional argument: 'text'
