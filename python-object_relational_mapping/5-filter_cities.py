@@ -11,7 +11,7 @@ if __name__ == "__main__":
     cur.execute(
         "SELECT cities.name FROM cities "
         "JOIN states ON cities.state_id = states.id "
-        "WHERE states.name =  ORDER BY cities.id ASC",
+        "WHERE states.name = %s ORDER BY cities.id ASC",
         (sys.argv[4],))
     cities = [row[0] for row in cur.fetchall()]
     print(", ".join(cities))
