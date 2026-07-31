@@ -1,0 +1,57 @@
+>>> add_integer = __import__("0-add_integer").add_integer
+
+Basic addition of two positive integers
+>>> add_integer(1, 2)
+3
+
+Addition with a negative integer
+>>> add_integer(100, -2)
+98
+
+Using the default value for b
+>>> add_integer(2)
+100
+
+Floats are cast to integers before adding
+>>> add_integer(100.3, -2)
+98
+
+Both arguments as floats
+>>> add_integer(1.9, 2.9)
+3
+
+Zero as both arguments
+>>> add_integer(0, 0)
+0
+
+Large integers
+>>> add_integer(123456789, 987654321)
+1111111110
+
+Negative default with explicit a
+>>> add_integer(-98)
+0
+
+b is not a number, raises TypeError
+>>> add_integer(4, "School")
+Traceback (most recent call last):
+    ...
+TypeError: b must be an integer
+
+a is not a number, raises TypeError
+>>> add_integer(None)
+Traceback (most recent call last):
+    ...
+TypeError: a must be an integer
+
+a is a string, raises TypeError
+>>> add_integer("1", 2)
+Traceback (most recent call last):
+    ...
+TypeError: a must be an integer
+
+b is a list, raises TypeError
+>>> add_integer(1, [2])
+Traceback (most recent call last):
+    ...
+TypeError: b must be an integer

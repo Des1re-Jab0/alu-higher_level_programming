@@ -1,0 +1,28 @@
+>>> text_indentation = __import__("5-text_indentation").text_indentation
+
+Text with a period
+>>> text_indentation("Hello. World.")
+Hello.
+<BLANKLINE>
+World.
+
+Text with a question mark
+>>> text_indentation("Are you here? Yes.")
+Are you here?
+<BLANKLINE>
+Yes.
+
+Text with a colon
+>>> text_indentation("Note: this works.")
+Note:
+<BLANKLINE>
+this works.
+
+text is not a string, raises TypeError
+>>> text_indentation(89)
+Traceback (most recent call last):
+    ...
+TypeError: text must be a string
+
+Empty string prints nothing
+>>> text_indentation("")
