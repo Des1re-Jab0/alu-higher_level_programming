@@ -1,10 +1,10 @@
 #!/usr/bin/python3
-"""Fetches the ALU status endpoint using urllib and prints details about the response body."""
+"""Fetches the hbtn status endpoint and prints response body details."""
 from urllib import request
 
 
 if __name__ == "__main__":
-    with request.urlopen("https://alu-intranet.hbtn.io/status") as response:
+    with request.urlopen("https://intranet.hbtn.io/status") as response:
         body = response.read()
         print("Body response:")
         print("\t- type: {}".format(type(body)))
