@@ -1,3 +1,3 @@
 #!/bin/bash
-# sends a PUT request and follows the redirect until the server returns "You got me!"
-curl -s -L -X PUT "0.0.0.0:5000/catch_me"
+# follows a PUT redirect chain checking user_id and Origin to find the message
+curl -s -L -X PUT -d "user_id=98" -H "Origin: HolbertonSchool" "0.0.0.0:5000/catch_me"
