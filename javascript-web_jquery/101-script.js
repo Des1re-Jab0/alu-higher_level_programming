@@ -1,13 +1,13 @@
-$(document).ready(() => {
-  $('#add_item').on('click', () => {
-    $('.my_list').append('<li>Item</li>');
+$(document).ready(function () {
+  $('DIV#add_item').click(function () {
+    $('UL.my_list').append('<li>Item</li>');
   });
 
-  $('#remove_item').on('click', () => {
-    $('.my_list li').last().remove();
+  $('DIV#remove_item').click(function () {
+    $('UL.my_list li:last').remove();
   });
 
-  $('#clear_list').on('click', () => {
-    $('.my_list').empty();
+  $('DIV#clear_list').click(function () {
+    $('UL.my_list').empty();
   });
 });
