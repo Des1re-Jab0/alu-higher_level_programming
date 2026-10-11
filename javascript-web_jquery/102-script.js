@@ -1,9 +1,12 @@
-$(document).ready(() => {
-  $('#btn_translate').on('click', () => {
-    const langCode = $('#language_code').val();
+$(document).ready(function () {
 
-    $.get('https://www.fourtonfish.com/hellosalut/hello/?lang=' + encodeURIComponent(langCode), (data) => {
-      $('#hello').text(data.hello);
+  const url = 'https://hellosalut.stefanbohacek.com/';
+
+  $('INPUT#btn_translate').click(function () {
+    const code = $('INPUT#language_code').val();
+
+    $.get(url, { lang: code }, function (data) {
+      $('DIV#hello').text(data.hello);
     });
   });
 });
